@@ -1,13 +1,9 @@
 import React from 'react';
 import { Link, usePage } from '@inertiajs/react';
-// import { createInertiaApp } from '@inertiajs/react';
-// import { Inertia } from '@inertiajs/inertia';
 import { router } from '@inertiajs/react'
 import Pagination from "@/Components/Pagination";
 import Authenticated from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-
-
 
 const PersonnelIndex = ({auth}) => {
     const { personnels, sort, direction } = usePage().props;
@@ -21,6 +17,12 @@ const PersonnelIndex = ({auth}) => {
             },
             { preserveState: true }
         );
+    };
+
+    const handleDelete = (id) => {
+        if (confirm('Are you sure you want to delete this personnel record?')) {
+            router.delete(route('personnels.destroy', id));
+        }
     };
 
     const SortableHeader = ({ field, children }) => (
@@ -42,7 +44,7 @@ const PersonnelIndex = ({auth}) => {
     return (
         <Authenticated
         user={auth.user}
-        header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Dashboard</h2>}
+        header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Personnels</h2>}
     >
         <Head title="Dashboard" />
 
@@ -89,10 +91,16 @@ const PersonnelIndex = ({auth}) => {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <Link
                                         href={route('personnels.edit', personnel.id)}
-                                        className="text-indigo-600 hover:text-indigo-900"
+                                        className="text-indigo-600 hover:text-indigo-900 mr-2"
                                     >
                                         Edit
                                     </Link>
+                                    <button
+                                        onClick={() => handleDelete(personnel.id)}
+                                        className="text-red-600 hover:text-red-900"
+                                    >
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -100,15 +108,12 @@ const PersonnelIndex = ({auth}) => {
                 </table>
             </div>
             <Pagination links={personnels.links} />
-            {/* Add pagination here */}
         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </Authenticated>
-
     );
 };
 
