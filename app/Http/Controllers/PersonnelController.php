@@ -23,7 +23,7 @@ class PersonnelController extends Controller
             $query->orderBy($sortField, $sortDirection);
         }
 
-        $personnels = $query->paginate(2);
+        $personnels = $query->paginate(10);
 
         return Inertia::render('Personnel/Index', [
             'personnels' => $personnels,
