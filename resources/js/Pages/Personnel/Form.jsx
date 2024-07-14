@@ -22,6 +22,11 @@ const PersonnelForm = ({ personnel = {}, auth, isEditing = false }) => {
         "General",
         "Field Marshal"
     ];
+    const units = [
+        'NASA',
+        'NDC',
+        'NARC'
+    ];
 
     const { data, setData, post, put, processing, errors } = useForm({
         name: personnel.name || "",
@@ -119,15 +124,19 @@ const PersonnelForm = ({ personnel = {}, auth, isEditing = false }) => {
 
                                 <div>
                                     <InputLabel htmlFor="unit" value="Unit" />
-                                    <TextInput
+                                    <select
                                         id="unit"
-                                        type="text"
                                         name="unit"
                                         value={data.unit}
-                                        className="mt-1 block w-full"
+                                        className="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                         onChange={(e) => setData("unit", e.target.value)}
                                         required
-                                    />
+                                    >
+                                        <option value="">Select Unit</option>
+                                        {units.map((unit) => (
+                                            <option key={unit} value={unit}>{unit}</option>
+                                        ))}
+                                    </select>
                                     <InputError message={errors.unit} className="mt-2" />
                                 </div>
 
