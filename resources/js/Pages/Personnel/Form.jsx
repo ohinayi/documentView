@@ -6,13 +6,30 @@ import InputError from "@/Components/InputError";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 
 const PersonnelForm = ({ personnel = {}, auth, isEditing = false }) => {
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: currentYear - 2009 }, (_, i) => currentYear - i);
+
+    const nigerianOfficerRanks = [
+        "Second Lieutenant",
+        "Lieutenant",
+        "Captain",
+        "Major",
+        "Lieutenant Colonel",
+        "Colonel",
+        "Brigadier General",
+        "Major General",
+        "Lieutenant General",
+        "General",
+        "Field Marshal"
+    ];
+
     const { data, setData, post, put, processing, errors } = useForm({
         name: personnel.name || "",
         rank: personnel.rank || "",
         serviceNo: personnel.serviceNo || "",
         nextOfKin: personnel.nextOfKin || "",
         unit: personnel.unit || "",
-        yearOfPayment: personnel.yearOfPayment || "",
+        yearOfPayment: personnel.yearOfPayment || currentYear.toString(),
         dateOfDeath: personnel.dateOfDeath || "",
         remarksStatus: personnel.remarksStatus || "",
     });
@@ -56,15 +73,19 @@ const PersonnelForm = ({ personnel = {}, auth, isEditing = false }) => {
 
                                 <div>
                                     <InputLabel htmlFor="rank" value="Rank" />
-                                    <TextInput
+                                    <select
                                         id="rank"
-                                        type="text"
                                         name="rank"
                                         value={data.rank}
-                                        className="mt-1 block w-full"
+                                        className="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                         onChange={(e) => setData("rank", e.target.value)}
                                         required
-                                    />
+                                    >
+                                        <option value="">Select Rank</option>
+                                        {nigerianOfficerRanks.map((rank) => (
+                                            <option key={rank} value={rank}>{rank}</option>
+                                        ))}
+                                    </select>
                                     <InputError message={errors.rank} className="mt-2" />
                                 </div>
 
@@ -112,15 +133,19 @@ const PersonnelForm = ({ personnel = {}, auth, isEditing = false }) => {
 
                                 <div>
                                     <InputLabel htmlFor="yearOfPayment" value="Year of Payment" />
-                                    <TextInput
+                                    <select
                                         id="yearOfPayment"
-                                        type="text"
                                         name="yearOfPayment"
                                         value={data.yearOfPayment}
-                                        className="mt-1 block w-full"
+                                        className="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                         onChange={(e) => setData("yearOfPayment", e.target.value)}
                                         required
-                                    />
+                                    >
+                                        <option value="">Select Year</option>
+                                        {years.map((year) => (
+                                            <option key={year} value={year.toString()}>{year}</option>
+                                        ))}
+                                    </select>
                                     <InputError message={errors.yearOfPayment} className="mt-2" />
                                 </div>
 
@@ -148,6 +173,7 @@ const PersonnelForm = ({ personnel = {}, auth, isEditing = false }) => {
                                         onChange={(e) => setData("remarksStatus", e.target.value)}
                                         required
                                     >
+                                        <option value="">Select Status</option>
                                         <option value="Pending">Pending</option>
                                         <option value="Paid">Paid</option>
                                         <option value="Declined">Declined</option>

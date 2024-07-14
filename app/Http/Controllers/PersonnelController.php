@@ -22,7 +22,17 @@ class PersonnelController extends Controller
             $sortDirection = $request->input('direction', 'asc');
             $query->orderBy($sortField, $sortDirection);
         }
-
+        if ($request->has('search')) {
+            $searchTerm = $request->input('search');
+            $query->where('name', 'like', "%{$searchTerm}%")
+                ->orWhere('rank', 'like', "%{$searchTerm}%")
+                ->orWhere('serviceNo', 'like', "%{$searchTerm}%")
+                ->orWhere('yearOfPayment', 'like', "%{$searchTerm}%")
+                ->orWhere('dateOfDeath', 'like', "%{$searchTerm}%")
+                ->orWhere('remarksStatus', 'like', "%{$searchTerm}%")
+                ->orWhere('unit', 'like', "%{$searchTerm}%")
+                ->orWhere('nextOfKin', 'like', "%{$searchTerm}%");
+        }
         $personnels = $query->paginate(10);
 
         return Inertia::render('Personnel/Index', [
@@ -50,7 +60,6 @@ class PersonnelController extends Controller
         Personnel::create($validated);
 
         return redirect()->route('personnels.index')->with('success', 'Personnel created successfully.');
-
     }
 
     /**
